@@ -1,4 +1,4 @@
-# React Interview Questions for 3 Years Experience
+# React Questions for 3 Years
 
 ## Core React Concepts
 
@@ -196,7 +196,9 @@ function HookCounter() {
   return (
     <div>
       <p>Count: {count}</p>
-      <button onClick={() => setCount((prevCount) => prevCount + 1)}>Increment</button>
+      <button onClick={() => setCount((prevCount) => prevCount + 1)}>
+        Increment
+      </button>
     </div>
   );
 }
@@ -282,7 +284,9 @@ function App() {
       <div>
         <Header />
         <Main />
-        <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>Toggle Theme</button>
+        <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+          Toggle Theme
+        </button>
       </div>
     </ThemeContext.Provider>
   );
@@ -364,7 +368,9 @@ function Counter() {
       <button onClick={() => dispatch({ type: "increment" })}>+</button>
       <button onClick={() => dispatch({ type: "decrement" })}>-</button>
       <button onClick={() => dispatch({ type: "reset" })}>Reset</button>
-      <button onClick={() => dispatch({ type: "set", payload: 10 })}>Set to 10</button>
+      <button onClick={() => dispatch({ type: "set", payload: 10 })}>
+        Set to 10
+      </button>
     </div>
   );
 }
@@ -388,7 +394,9 @@ function ExpensiveCalculation({ list, onItemClick }) {
   // useMemo for expensive calculations
   const filteredList = useMemo(() => {
     console.log("Filtering list..."); // Should only run when list or filter changes
-    return list.filter((item) => item.name.toLowerCase().includes(filter.toLowerCase()));
+    return list.filter((item) =>
+      item.name.toLowerCase().includes(filter.toLowerCase())
+    );
   }, [list, filter]); // Dependencies array
 
   // useCallback for stable function references
@@ -402,7 +410,12 @@ function ExpensiveCalculation({ list, onItemClick }) {
 
   return (
     <div>
-      <input type="text" value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="Filter items..." />
+      <input
+        type="text"
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        placeholder="Filter items..."
+      />
       <ul>
         {filteredList.map((item) => (
           <li key={item.id} onClick={() => handleItemClick(item.id)}>
@@ -564,7 +577,10 @@ class UserProfileClass extends React.Component {
     this.controller = new AbortController();
 
     try {
-      const response = await fetch(`https://api.example.com/users/${this.props.userId}`, { signal: this.controller.signal });
+      const response = await fetch(
+        `https://api.example.com/users/${this.props.userId}`,
+        { signal: this.controller.signal }
+      );
       if (!response.ok) throw new Error("Failed to fetch");
       const userData = await response.json();
       this.setState({ user: userData, error: null });
@@ -612,7 +628,10 @@ function UserProfileHooks({ userId }) {
       controllerRef.current = new AbortController();
 
       try {
-        const response = await fetch(`https://api.example.com/users/${userId}`, { signal: controllerRef.current.signal });
+        const response = await fetch(
+          `https://api.example.com/users/${userId}`,
+          { signal: controllerRef.current.signal }
+        );
         if (!response.ok) throw new Error("Failed to fetch");
         const userData = await response.json();
         setUser(userData);
@@ -799,7 +818,9 @@ function ThemeProvider({ children }) {
     toggleTheme,
   };
 
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+  );
 }
 
 function ThemedButton() {
@@ -897,7 +918,10 @@ function counterReducer(state = initialState, action) {
 import { createStore } from "redux";
 import counterReducer from "./reducer";
 
-const store = createStore(counterReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = createStore(
+  counterReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 export default store;
 
@@ -959,7 +983,11 @@ const CounterContext = createContext();
 function CounterProvider({ children }) {
   const [state, dispatch] = useReducer(counterReducer, { count: 0 });
 
-  return <CounterContext.Provider value={{ state, dispatch }}>{children}</CounterContext.Provider>;
+  return (
+    <CounterContext.Provider value={{ state, dispatch }}>
+      {children}
+    </CounterContext.Provider>
+  );
 }
 
 // Custom hook to use the counter context
@@ -1172,45 +1200,31 @@ function AppAlt() {
 
 ### Question: What are React portals and when would you use them?
 
-**Answer:** React portals provide a way to render children into a DOM node that exists outside the DOM hierarchy of the parent component. This is useful for components like modals, tooltips, or floating menus that need to visually "break out" of their container.
+**Answer:** React Portals provide a way to render children into a different part of the DOM that is outside the parent component’s hierarchy.
+
+Normally, a component renders inside its parent’s DOM tree.
+
+With portals, you can render a component’s output into any DOM node you choose.
 
 **Example:**
 
 ```jsx
-import React, { useState } from "react";
-import { createPortal } from "react-dom";
+import React from "react";
+import ReactDOM from "react-dom";
 
-function Modal({ isOpen, onClose, children }) {
-  if (!isOpen) return null;
-
-  // Create a portal to a DOM node outside the regular hierarchy
-  return createPortal(
-    <div className="modal-overlay">
-      <div className="modal">
-        <button className="modal-close" onClick={onClose}>
-          ×
-        </button>
-        <div className="modal-content">{children}</div>
-      </div>
-    </div>,
-    // Target DOM node (typically at the end of the body)
-    document.getElementById("modal-root")
+function Modal({ children }) {
+  return ReactDOM.createPortal(
+    <div className="modal">{children}</div>,
+    document.getElementById("modal-root") // portal target
   );
 }
 
 function App() {
-  const [showModal, setShowModal] = useState(false);
-
   return (
-    <div className="app">
-      <h1>React Portals Example</h1>
-      <p>This content might be overflowed or have z-index issues.</p>
-
-      <button onClick={() => setShowModal(true)}>Open Modal</button>
-
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-        <h2>This is a modal</h2>
-        <p>It's rendered outside the DOM hierarchy via a Portal!</p>
+    <div>
+      <h1>App Content</h1>
+      <Modal>
+        <h2>This is inside a portal!</h2>
       </Modal>
     </div>
   );
@@ -1275,7 +1289,9 @@ class ErrorBoundary extends Component {
               <summary>Error Details</summary>
               <p>{this.state.error && this.state.error.toString()}</p>
               <p>Component Stack:</p>
-              <pre>{this.state.errorInfo && this.state.errorInfo.componentStack}</pre>
+              <pre>
+                {this.state.errorInfo && this.state.errorInfo.componentStack}
+              </pre>
             </details>
           )}
         </div>
@@ -1356,8 +1372,12 @@ function App() {
       {/* Navigation */}
       <nav>
         <button onClick={() => setActiveTab("home")}>Home</button>
-        <button onClick={() => setActiveTab("visualizer")}>Data Visualizer</button>
-        <button onClick={() => setShowComponent(true)}>Load Expensive Component</button>
+        <button onClick={() => setActiveTab("visualizer")}>
+          Data Visualizer
+        </button>
+        <button onClick={() => setShowComponent(true)}>
+          Load Expensive Component
+        </button>
       </nav>
 
       {/* Content area with Suspense */}
@@ -1421,7 +1441,9 @@ function FilterableList() {
   const allItems = Array.from({ length: 10000 }, (_, i) => `Item ${i + 1}`);
 
   // Filter the list (computationally expensive operation)
-  const filteredItems = allItems.filter((item) => item.toLowerCase().includes(deferredQuery.toLowerCase()));
+  const filteredItems = allItems.filter((item) =>
+    item.toLowerCase().includes(deferredQuery.toLowerCase())
+  );
 
   function handleChange(e) {
     // Update the input immediately (urgent update)
@@ -1436,7 +1458,12 @@ function FilterableList() {
   return (
     <div>
       <h2>Filterable List with useTransition</h2>
-      <input type="text" value={query} onChange={handleChange} placeholder="Type to filter..." />
+      <input
+        type="text"
+        value={query}
+        onChange={handleChange}
+        placeholder="Type to filter..."
+      />
 
       {isPending && <div>Loading results...</div>}
 
@@ -1444,7 +1471,9 @@ function FilterableList() {
         {filteredItems.slice(0, 100).map((item) => (
           <li key={item}>{item}</li>
         ))}
-        {filteredItems.length > 100 && <li>...and {filteredItems.length - 100} more items</li>}
+        {filteredItems.length > 100 && (
+          <li>...and {filteredItems.length - 100} more items</li>
+        )}
       </ul>
     </div>
   );
@@ -1552,7 +1581,11 @@ function OptimizedApp() {
 
       <button onClick={() => setCount(count + 1)}>Increment Count</button>
 
-      <button onClick={() => setData([...data, Math.floor(Math.random() * 100)])}>Add Random Number</button>
+      <button
+        onClick={() => setData([...data, Math.floor(Math.random() * 100)])}
+      >
+        Add Random Number
+      </button>
 
       {/* Child component with memoized props */}
       <ExpensiveChild data={data} onClick={handleItemClick} />
@@ -1630,8 +1663,12 @@ function ParentComponent() {
       <h2>React.memo Example</h2>
       <p>Count: {count}</p>
       <button onClick={() => setCount(count + 1)}>Increment Count</button>
-      <button onClick={() => setName(name === "John" ? "Jane" : "John")}>Toggle Name</button>
-      <button onClick={() => setUser({ ...user, age: user.age + 1 })}>Increment User Age</button>
+      <button onClick={() => setName(name === "John" ? "Jane" : "John")}>
+        Toggle Name
+      </button>
+      <button onClick={() => setUser({ ...user, age: user.age + 1 })}>
+        Increment User Age
+      </button>
 
       <div className="components-container">
         <RegularComponent name={name} age={30} />
@@ -1747,7 +1784,11 @@ function KeysExample() {
       </div>
       <div className="explanation">
         <h3>Why keys matter:</h3>
-        <p>Try adding items and typing in the inputs. With index-based keys, your input focus and values get mixed up when you add items at the beginning.</p>
+        <p>
+          Try adding items and typing in the inputs. With index-based keys, your
+          input focus and values get mixed up when you add items at the
+          beginning.
+        </p>
         <p>With stable keys, React correctly preserves component state.</p>
       </div>
     </div>
@@ -1807,7 +1848,10 @@ function Counter() {
   return (
     <div>
       <p data-testid="count-value">Count: {count}</p>
-      <button data-testid="increment-button" onClick={() => setCount(count + 1)}>
+      <button
+        data-testid="increment-button"
+        onClick={() => setCount(count + 1)}
+      >
         Increment
       </button>
     </div>

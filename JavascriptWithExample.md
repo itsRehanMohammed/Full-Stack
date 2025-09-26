@@ -515,6 +515,44 @@ const addThenSquare = compose(square, addOne);
 console.log(addThenSquare(3)); // (3+1)² = 16
 ```
 
+## Spread VS Rest
+
+🔹 Spread Operator (...)
+
+👉 Used to expand elements of an array/object.
+
+**Example:**
+
+```javascript
+const arr1 = [1, 2, 3];
+const arr2 = [4, 5];
+
+const combined = [...arr1, ...arr2];  
+console.log(combined); // [1, 2, 3, 4, 5]
+```
+Here, ...arr1 spreads out [1, 2, 3] into the new array.
+
+🔹 Rest Operator (...)
+
+👉 Used to collect multiple arguments into a single variable.
+
+**Example:**
+
+```javascript
+function sum(...numbers) {
+return numbers.reduce((total, num) => total + num, 0);
+}
+
+console.log(sum(1, 2, 3, 4)); // 10
+```
+Here, ...numbers collects all arguments into an array: [1, 2, 3, 4].
+
+✅ Key difference:
+
+Spread = expands
+
+Rest = collects
+
 ## Pure Functions and Immutability
 
 **Question:** What are pure functions and why is immutability important in JavaScript?
@@ -938,7 +976,8 @@ const sessionUser = sessionStorage.getItem("sessionUser");
 sessionStorage.removeItem("sessionUser");
 
 // Cookies - can set expiration, sent with requests
-document.cookie = "username=Alice; expires=Fri, 31 Dec 2023 23:59:59 GMT; path=/";
+document.cookie =
+  "username=Alice; expires=Fri, 31 Dec 2023 23:59:59 GMT; path=/";
 document.cookie = "language=en; SameSite=Strict; Secure";
 
 // Reading cookies
@@ -1286,7 +1325,8 @@ document.getElementById("userContent").textContent = userInput;
 
 // Or use a library like DOMPurify
 import DOMPurify from "dompurify";
-document.getElementById("userContent").innerHTML = DOMPurify.sanitize(userInput);
+document.getElementById("userContent").innerHTML =
+  DOMPurify.sanitize(userInput);
 
 // 2. Avoid eval() and other dangerous functions
 // Unsafe
